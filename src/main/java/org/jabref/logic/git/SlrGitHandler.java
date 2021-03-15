@@ -33,15 +33,13 @@ public class SlrGitHandler extends GitHandler {
         super(repositoryPath);
     }
 
-    public void appendLatestSearchResultsOntoCurrentBranch(String patchMessage, String searchBranchName, String workBranchName) throws IOException, GitAPIException {
-        // Create a commit on work branch with search commit as a parent
-        this.mergeBranches(workBranchName, searchBranchName, MergeStrategy.OURS);
+    public void appendLatestSearchResultsOntoCurrentBranch(String patchMessage, String searchBranchName) throws IOException, GitAPIException {
         // Calculate and apply new search results to work branch
         String patch = calculatePatchOfNewSearchResults(searchBranchName);
         Map<Path, String> result = parsePatchForAddedEntries(patch);
+
         applyPatch(result);
-        // Amend these changes to the merge commit -> Commit has search branch as parent and contains the new results
-        this.createCommitOnCurrentBranch(patchMessage, true);
+        this.createCommitOnCurrentBranch(patchMessage, false);
     }
 
     /**

@@ -230,7 +230,7 @@ class StudyRepository {
                 return;
             }
             // Patch new results into work branch
-            gitHandler.appendLatestSearchResultsOntoCurrentBranch(commitMessage + " - Patch", SEARCH_BRANCH, WORK_BRANCH);
+            gitHandler.appendLatestSearchResultsOntoCurrentBranch(commitMessage + " - Patch", SEARCH_BRANCH);
             // Update both remote tracked branches
             updateRemoteSearchAndWorkBranch();
         } catch (GitAPIException e) {
@@ -378,11 +378,12 @@ class StudyRepository {
                 BibDatabase fetcherEntries = fetcherResult.getFetchResult();
                 BibDatabaseContext existingFetcherResult = getFetcherResultEntries(result.getQuery(), fetcherResult.getFetcherName());
 
+                // Merge new entries into fetcher result file
+                merger.merge(existingFetcherResult.getDatabase(), fetcherEntries);
+
                 // Create citation keys for all entries that do not have one
                 generateCiteKeys(existingFetcherResult, fetcherEntries);
 
-                // Merge new entries into fetcher result file
-                merger.merge(existingFetcherResult.getDatabase(), fetcherEntries);
                 // Aggregate each fetcher result into the query result
                 merger.merge(queryResultEntries, fetcherEntries);
 

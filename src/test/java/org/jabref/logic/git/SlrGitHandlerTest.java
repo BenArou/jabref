@@ -75,7 +75,7 @@ class SlrGitHandlerTest {
         gitHandler.createCommitOnCurrentBranch("Commit on branch2.", false);
 
         gitHandler.checkoutBranch("branch1");
-        gitHandler.appendLatestSearchResultsOntoCurrentBranch("TestMessage", "branch2", "branch1");
+        gitHandler.appendLatestSearchResultsOntoCurrentBranch("TestMessage", "branch2");
 
         assertEquals("This is a new line of text\n", Files.readString(Path.of(repositoryPath.toString(), "Test1.txt")));
     }
